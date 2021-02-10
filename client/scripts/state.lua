@@ -117,7 +117,7 @@ return function(reducer, startingState)
 		_middlewareTop = identityMiddleware,
 		dispatch = dispatch,
 		getState = getState,
-		listen = listen,
+		hook = hook,
 		applyMiddleware = applyMiddleware
 	}
 end
