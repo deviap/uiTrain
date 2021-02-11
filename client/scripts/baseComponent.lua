@@ -89,7 +89,7 @@ new = function(self, ...)
 	return newObject
 end
 
-return new{
+return {
 	new = new,
 	extend = extend,
 	redraw = noop,

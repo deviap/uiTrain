@@ -8,17 +8,23 @@
 	@Returns
 		[any] selectedValue
 --]]
+
+
 return function(targetTable, ...)
 	for _, key in next, {...} do
 		if type(targetTable) == nil then
 			return nil
 		end
-		
-		if type(targetTable) ~= "table" or type(targetTable) ~= "tevObject" then
-			error("Invaild selection.", 2)
+
+		if type(targetTable) ~= "table" then
+			if type(targetTable) ~= "tevObject" then
+				error("Invaild selection.", 2)
+			end
 		end
 
 		targetTable = targetTable[key]
+
+		
 	end
 
 	return targetTable
