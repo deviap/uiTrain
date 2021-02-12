@@ -76,7 +76,7 @@ new = function(self, ...)
 	-- State should be inserted in :init(). If it is, bind the redraw function.
 	if newObject.state then
 		newObject.maid:giveCallback(
-			newObject.state:listen(
+			newObject.state:hook(
 				function()
 					newObject:redraw()
 				end
