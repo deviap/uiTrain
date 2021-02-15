@@ -24,6 +24,20 @@ local ADD_OBJECT_TYPE_ERROR =
 local ADD_OBJECT_MISSING_DESTROY_ERROR =
 	"Argument #2 is missing 'destroy' method."
 
+local cleanTarget = function(target)
+	local targetType = type(target)
+
+	if targetType == "table" then
+		target:destroy()
+	elseif targetType == "tevObj" then
+		target:destroy()
+	elseif targetType == "number" then
+		core.disconnect(target)
+	elseif targetType == "function" then
+		target()
+	end
+end
+
 local giveCallback = function(self, callback)
 	--[[
 		@Description
@@ -103,18 +117,7 @@ local cleanUp = function(self)
 	--]]
 
 	for target, _ in next, self._tasks do
-		local targetType = type(target)
-
-		if targetType == "table" then
-			target:destroy()
-		elseif targetType == "tevObject" then
-			target:destroy()
-		elseif targetType == "number" then
-			core.disconnect(target)
-		elseif targetType == "function" then
-			target()
-		end
-
+		cleanTarget(target)
 		self._tasks[target] = nil
 	end
 end
@@ -132,18 +135,7 @@ local cleanUpTarget = function(self, target)
 
 	for possibleTarget, _ in next, self._tasks do
 		if possibleTarget == target then
-			local targetType = type(target)
-
-			if targetType == "table" then
-				target:destroy()
-			elseif targetType == "tevObject" then
-				target:destroy()
-			elseif targetType == "number" then
-				core.disconnect(target)
-			elseif targetType == "function" then
-				target()
-			end
-
+			cleanTarget(target)
 			self._tasks[target] = nil
 		end
 	end
