@@ -39,7 +39,7 @@ local giveCallback = function(self, callback)
 		error(ADD_CALLBACK_TYPE_ERROR:format(type(callback)), 2)
 	end
 
-	self._tasks[#self._tasks + 1] = callback
+	self._tasks[callback] = true
 	return callback
 end
 
@@ -61,9 +61,8 @@ local giveEvent = function(self, eventId)
 		error(ADD_EVENT_TYPE_ERROR:format(type(eventId)), 2)
 	end
 
-	return eventId, self:giveCallback(function()
-		core.disconnect(eventId)
-	end)
+	self._tasks[eventId] = true
+	return eventId
 end
 
 local giveObject = function(self, object)
@@ -89,9 +88,8 @@ local giveObject = function(self, object)
 
 	if not object.destroy then error(ADD_OBJECT_MISSING_DESTROY_ERROR, 2) end
 
-	return object, self:giveCallback(function()
-		object:destroy()
-	end)
+	self._tasks[object] = true
+	return object
 end
 
 local cleanUp = function(self)
@@ -104,16 +102,27 @@ local cleanUp = function(self)
 			[nil]
 	--]]
 
-	for key, callback in next, self._tasks do
-		spawn(callback)
-		self._tasks[key] = nil
+	for target, _ in next, self._tasks do
+		local targetType = type(target)
+
+		if targetType == "table" then
+			target:destroy()
+		elseif targetType == "tevObject" then
+			target:destroy()
+		elseif targetType == "number" then
+			core.disconnect(target)
+		elseif targetType == "function" then
+			target()
+		end
+
+		self._tasks[target] = nil
 	end
 end
 
 local cleanUpTarget = function(self, target)
 	--[[
 		@Description
-			Cleans up the targeted function in maid asynchronously.
+			Cleans up the targeted function in maid.
 		@Parameters
 			[table] maid
 			[function] target
@@ -121,11 +130,21 @@ local cleanUpTarget = function(self, target)
 			[nil]	
 	--]]
 
-	for key, callback in next, self._tasks do
-		if callback == target then
-			spawn(callback)
-			self._tasks[key] = nil
-			break
+	for possibleTarget, _ in next, self._tasks do
+		if possibleTarget == target then
+			local targetType = type(target)
+
+			if targetType == "table" then
+				target:destroy()
+			elseif targetType == "tevObject" then
+				target:destroy()
+			elseif targetType == "number" then
+				core.disconnect(target)
+			elseif targetType == "function" then
+				target()
+			end
+
+			self._tasks[target] = nil
 		end
 	end
 end
