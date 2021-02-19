@@ -37,6 +37,11 @@ local set = function(self, newState)
 		@Returns
 			[nil]
 	]]
+	
+	if type(newState) == "function" then
+		newState = newState(self:get())
+	end
+
 	for _, callback in next, self._subscribers do
 		callback(newState, self._state)
 	end
