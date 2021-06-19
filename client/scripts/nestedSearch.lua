@@ -17,14 +17,12 @@ return function(targetTable, ...)
 		end
 
 		if type(targetTable) ~= "table" then
-			if type(targetTable) ~= "tevObject" then
+			if type(targetTable) ~= "tevObj" then
 				error("Invaild selection.", 2)
 			end
 		end
 
 		targetTable = targetTable[key]
-
-		
 	end
 
 	return targetTable
