@@ -6,8 +6,10 @@ return {
 	maid = require("./maid.lua"),
 
 	state = require("./state.lua"),
-	simState = require("./simState.lua"),
 	combineReducers = require("./combineReducers.lua"),
+
+	simState = require("./simState.lua"),
+	none = require("./none.lua"),
 
 	build = require("./build.lua"),
 	selectChildren = require("./selectChildren.lua"),

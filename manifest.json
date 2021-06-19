@@ -3,7 +3,7 @@
     "id": "uiLib",
     "name": "uiTrain",
     "description": "A bundle of useful files for UI development.",
-    "version": "2.1.2",
+    "version": "2.1.3",
 	"isApp": false,
 	"permissions": {
         "client":{

@@ -14,6 +14,7 @@
 
 local deepClone = require("./deepClone.lua")
 local insertInGap = require("./insertInGap.lua")
+local none = require("./none.lua")
 
 local get = function(self)
 	--[[
@@ -27,19 +28,38 @@ local get = function(self)
 	return deepClone(self._state)
 end
 
-local set = function(self, newState)
+local diffTable
+diffTable = function(destination, origin)
+	for key, value in next, origin do
+		if value == none then
+			destination[key] = nil
+		elseif type(value) == "table" then
+			diffTable(destination[key], value)
+		else
+			destination[key] = value
+		end
+	end
+
+	return destination
+end
+
+local set = function(self, incomingState)
 	--[[
 		@Description
 			Sets the state of the given simState. Hooks are informed.
 		@Parameter
 			[table] self
-			[any] newState
+			[any] incomingState
 		@Returns
 			[nil]
 	]]
-	
-	if type(newState) == "function" then
-		newState = newState(self:get())
+
+	local newState = self:get()
+
+	if type(incomingState) == "function" then
+		incomingState(newState)
+	elseif type(incomingState) == "table" then
+		diffTable(newState, incomingState)
 	end
 
 	for _, callback in next, self._subscribers do
