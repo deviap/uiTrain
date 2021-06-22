@@ -9,7 +9,6 @@
 		[any] selectedValue
 --]]
 
-
 return function(targetTable, ...)
 	for _, key in next, {...} do
 		if type(targetTable) == nil then

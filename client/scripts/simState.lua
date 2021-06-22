@@ -30,6 +30,17 @@ end
 
 local diffTable
 diffTable = function(destination, origin)
+	--[[
+		@Description
+			Merge the two given tables into destination. Modifies destination
+			instead of creating a new table.
+		@Parameters
+			[table] destination
+			[table] origin
+		@Returns
+			[table] destination
+	]]
+
 	for key, value in next, origin do
 		if value == none then
 			destination[key] = nil
