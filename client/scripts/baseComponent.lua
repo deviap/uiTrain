@@ -16,7 +16,7 @@
 			Preferably implement this function when you extend this component! 
 			By default, it is not implemented at all nor does it need to be.
 --]]
-local state = require("./state.lua")
+local simState = require("./simState.lua")
 local maid = require("./maid.lua")
 local baseObj = require("./baseObj.lua")
 
@@ -38,6 +38,10 @@ return baseObj:extend {
 		self.maid:cleanUp()
 	end,
 
+	setState = function(self, ...)
+		self.state:set(...)
+	end,
+
 	new = function(self, ...)
 		--[[
 			@Description
@@ -55,19 +59,13 @@ return baseObj:extend {
 		local newObject = self:extend()
 
 		newObject.maid = maid:new()
+		newObject.state = simState:new()
 
 		if newObject.init then newObject:init(...) end
 
-		-- State should be inserted in :init(). If it is, bind the redraw function.
-		if newObject.state then
-			newObject.maid:addTask(
-				newObject.state:hook(
-					function()
-						newObject:redraw()
-					end
-				)
-			)
-		end
+		newObject.state:hook(function()
+			newObject:redraw()
+		end)
 
 		newObject:redraw()
 

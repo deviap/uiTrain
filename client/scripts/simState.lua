@@ -1,7 +1,7 @@
 -- By utrain
 --[[
 	@Description
-		Creates a new simState. Essentially, a simplified version of state. 
+		Creates a new simState.
 	@Parameters
 		[any?] startingState
 	@Returns
