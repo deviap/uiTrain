@@ -10,7 +10,7 @@ local VALID_TYPES = {
 	["function"] = true,
 }
 
-local baseObj = require("baseObj.lua")
+local baseObj = require("./baseObj.lua")
 
 return baseObj:extend {
 	addTask = function(self, task, id)
