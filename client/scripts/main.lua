@@ -1,6 +1,7 @@
 -- By utrain
 -- Gathering of all of the modules
 return {
+	baseObj = require("./baseObj.lua"),
 	baseComponent = require("./baseComponent.lua"),
 	quickBind = require("./quickBind.lua"), --Considering reworking this.
 	maid = require("./maid.lua"),
