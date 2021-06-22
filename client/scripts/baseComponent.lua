@@ -16,82 +16,61 @@
 			Preferably implement this function when you extend this component! 
 			By default, it is not implemented at all nor does it need to be.
 --]]
-local newState = require("./state.lua")
-local newMaid = require("./maid.lua")
+local state = require("./state.lua")
+local maid = require("./maid.lua")
+local baseObj = require("./baseObj.lua")
 
 local noop = function()
 end
 
-local destroy = function(self)
-	--[[
-		@Description
-			Cleans up object with maid.
-		@Parameters
-			[table] self
-				Object
-		@Returns
-			nil
-	]]
+return baseObj:extend {
+	destroy = function(self)
+		--[[
+			@Description
+				Cleans up object with maid.
+			@Parameters
+				[table] self
+					Object
+			@Returns
+				nil
+		]]
 
-	self.maid:cleanUp()
-end
+		self.maid:cleanUp()
+	end,
 
-local extend = function(self)
-	--[[
-		@Description
-			Shallowly clones the given table.
-		@Parameters
-			[table] self
-		@Returns
-			[table] newObject
-	--]]
-	local newObject = {}
+	new = function(self, ...)
+		--[[
+			@Description
+				Builds a new UI element based off the given object.
+			@Parameters
+				[table] self
+					Object
+				[varArg?] properties
+					This is where the user can pass in properties to 'init' if it
+					does exist.
+			@Returns
+				[table] newObject
+		--]]
 
-	for key, value in next, self do newObject[key] = value end
+		local newObject = self:extend()
 
-	return newObject
-end
+		newObject.maid = maid:new()
 
-local new
-new = function(self, ...)
-	--[[
-		@Description
-			Builds a new UI element based off the given object.
-		@Parameters
-			[table] self
-				Object
-			[varArg?] properties
-				This is where the user can pass in properties to 'init' if it
-				does exist.
-		@Returns
-			[table] newObject
-	--]]
+		if newObject.init then newObject:init(...) end
 
-	local newObject = self:extend()
-
-	newObject.maid = newMaid()
-
-	if newObject.init then newObject:init(...) end
-
-	-- State should be inserted in :init(). If it is, bind the redraw function.
-	if newObject.state then
-		newObject.maid:giveCallback(
-			newObject.state:hook(
-				function()
-					newObject:redraw()
-				end
+		-- State should be inserted in :init(). If it is, bind the redraw function.
+		if newObject.state then
+			newObject.maid:addTask(
+				newObject.state:hook(
+					function()
+						newObject:redraw()
+					end
+				)
 			)
-		)
-	end
+		end
 
-	newObject:redraw()
+		newObject:redraw()
 
-	return newObject
-end
-
-return {
-	new = new,
-	extend = extend,
-	redraw = noop,
-	destroy = destroy,
+		return newObject
+	end,
 }
