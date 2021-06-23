@@ -26,7 +26,13 @@ return baseObj:extend {
 
 		self._tasks[id] = task
 
-		return id
+		return task, id
+	end,
+
+	addTasks = function(self, tasks)
+		for key, value in next, tasks do
+			self:addTask(value)
+		end
 	end,
 
 	cleanTask = function(self, id)
@@ -34,7 +40,7 @@ return baseObj:extend {
 			or error(INVALID_ID_ERROR:format(tostring(id)))
 		local targetType = type(target)
 
-		if targetType == "devObj" then
+		if targetType == "tevObj" then
 			target:destroy()
 		elseif targetType == "table" then
 			target:destroy()
@@ -64,7 +70,7 @@ return baseObj:extend {
 		local id, _ = next(self._tasks, nil)
 
 		while id do
-			self:cleanUp(id)
+			self:cleanTask(id)
 			id, _ = next(self._tasks, id)
 		end
 	end,

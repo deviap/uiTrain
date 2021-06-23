@@ -1,4 +1,3 @@
--- By utrain
 local deepClone
 deepClone = function(target)
 	--[[

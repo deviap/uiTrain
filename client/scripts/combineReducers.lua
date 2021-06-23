@@ -1,4 +1,3 @@
--- By utrain
 --[[
 	@Description
 		Given a table of reducers, create a singular reducer that uses the

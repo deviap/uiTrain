@@ -1,4 +1,3 @@
--- By utrain
 --[[
 	@Description
 		This function takes in a className and returns another function which

@@ -1,4 +1,3 @@
--- By utrain
 --[[
 	@Description
 		Selects a given location in a table or tevObject.

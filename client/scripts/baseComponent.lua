@@ -1,4 +1,3 @@
--- By utrain
 --[[
 	@Description
 		This is the base component that all other components can be derived 
@@ -35,7 +34,7 @@ return baseObj:extend {
 				nil
 		]]
 
-		self.maid:cleanUp()
+		self.maid:cleanAll()
 	end,
 
 	setState = function(self, ...)
@@ -63,9 +62,12 @@ return baseObj:extend {
 
 		if newObject.init then newObject:init(...) end
 
-		newObject.state:hook(function()
-			newObject:redraw()
-		end)
+		newObject.maid:addTask(
+			newObject.state:hook(function(oldState, newState)
+				if oldState == newState then return end
+				newObject:redraw()
+			end)
+		)
 
 		newObject:redraw()
 

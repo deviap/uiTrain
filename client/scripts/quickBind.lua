@@ -1,4 +1,3 @@
--- By utrain
 --[[
 	@Description
 		Quickly bind to events in a component. Note that the task to clean them

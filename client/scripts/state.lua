@@ -1,4 +1,3 @@
--- By utrain
 --[[
 	@Description
 		Creates a new state.

@@ -1,4 +1,3 @@
--- By utrain
 --[[
 	@Description
 		Creates a new simState.
@@ -8,13 +7,14 @@
 		[table] simState
 	@Interface
 		[nil] set([table] simState, [any] newState)
-		[any] get([table] simState)
+		[any] get([table] simState, [...any] path)
 		[function unhook] hook([table] simState, [function] callback)
 --]]
 
 local baseObj = require("./baseObj.lua")
 local deepClone = require("./deepClone.lua")
 local insertInGap = require("./insertInGap.lua")
+local nestedSearch = require("./nestedSearch.lua")
 local none = require("./none.lua")
 
 local diffTable
@@ -44,16 +44,17 @@ diffTable = function(destination, origin)
 end
 
 return baseObj:extend {
-	get = function(self)
+	get = function(self, ...)
 		--[[
 			@Description
 				Deep clones and returns the given simState's state.
 			@Parameter
 				[table] self
+				[...any] path
 			@Returns
 				[any] state
 		]]
-		return deepClone(self._state)
+		return deepClone(nestedSearch(self._state, ...))
 	end,
 
 	set = function(self, incomingState)
@@ -100,6 +101,6 @@ return baseObj:extend {
 
 	init = function(self, startingState)
 		self._subscribers = {}
-		self._state = startingState
+		self._state = startingState or {}
 	end
 }
